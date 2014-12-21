@@ -58,13 +58,8 @@ public class Zipper {
 
                     File zipF = new File(firstName+".zip");
                     copyFile(zipF, firstName);
-                    zos.close();
-                    fos.close();
 
-//                    zipF.delete();
-//                    zipF = null;
-//                    System.gc();
-
+                    zipF.delete();
                 }
             }
         }
@@ -75,7 +70,7 @@ public class Zipper {
         zos.putNextEntry(zipEntry);
 
         fis = new FileInputStream(file);
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[10240];
         int len;
         while ((len = fis.read(buffer)) > 0) {
             zos.write(buffer, 0, len);
@@ -99,13 +94,11 @@ public class Zipper {
             zos.closeEntry();
         }
         zos.close();
+        fos.close();
+        fos = null;
+        System.gc();
         zis.close();
         fis.close();
-        fos.close();
-
-        file.delete();
-        file = null;
-        System.gc();
     }
 
     private String getFileExtension(File file) {
